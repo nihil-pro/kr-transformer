@@ -101,7 +101,7 @@ export class Transformer {
         if (value!.constructor !== jsonValue.constructor) {
           // if types are not equal and mode is strict, then throw
           if (throwable) {
-            throw new TransformError(`Type of "${property}" in JSON is not "${value.constructor}" as ${Name} expect`);
+            throw new TransformError(`Type of "${property}" in JSON is not "${value?.constructor?.name}" as ${Name} expect`);
           }
           // if mode is not strict, then leave initial value
           // but value may be created with primitive constructor, that's why we use valueOf here
@@ -190,7 +190,7 @@ export class Transformer {
       }
       const proto = Reflect.getPrototypeOf(value as Object)
       // Consider that initial value is an object without prototype
-      if (!proto.constructor) return Reflect.set(instance, property, jsonValue);
+      if (!proto) return Reflect.set(instance, property, jsonValue);
       return Reflect.set(instance, property, this.fromJSON(jsonValue, proto.constructor as { new (): Object }, throwable));
     })
 
@@ -217,7 +217,7 @@ export class Transformer {
 
   static toJSON(instance: Object): JSON | Object {
     const result = {}
-    Reflect.ownKeys(instance).forEach(property => {
+    Object.keys(instance).forEach(property => {
       const value = Reflect.get(instance, property)
       if (typeof value === 'function') {
         return

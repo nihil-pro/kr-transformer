@@ -1,6 +1,6 @@
 {
   "name": "kr-transformer",
-  "version": "2.0.4",
+  "version": "2.0.6",
   "description": "Transforms javascript plain objects and json to classes instances",
   "type": "module",
   "scripts": {
