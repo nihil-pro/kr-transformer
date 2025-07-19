@@ -120,7 +120,7 @@ export class Transformer {
         if (!Array.isArray(jsonValue)) {
           // if json value is not Array, and mode is strict, then throw
           if (throwable) {
-            new TransformError(`Type of "${property}" in JSON is not "Array" as ${Name} expect`);
+            throw new TransformError(`Type of "${property}" in JSON is not "Array" as ${Name} expect`);
           }
           // if mode is not strict, leave initial value
           return Reflect.set(instance, property, value);
@@ -132,7 +132,7 @@ export class Transformer {
           }
         } catch (e) {
           if (throwable) {
-            new TransformError(`Cannot transform elements of ${Name}.${property}`, { cause: e });
+            throw new TransformError(`Cannot transform elements of ${Name}.${property}`, { cause: e });
           }
         }
         return Reflect.set(instance, property, value);
@@ -141,7 +141,7 @@ export class Transformer {
       if (value instanceof Map) {
         if (jsonValue.constructor !== Object) {
           if (throwable) {
-            new TransformError(`Type of "${property}" in JSON is not "Object" as ${Name} expect`);
+            throw new TransformError(`Type of "${property}" in JSON is not "Object" as ${Name} expect`);
           }
           return Reflect.set(instance, property, value);
         }
@@ -153,7 +153,7 @@ export class Transformer {
           }
         } catch (e) {
           if (throwable) {
-            new TransformError(`Cannot transform elements of ${Name}.${property}`, { cause: e });
+            throw new TransformError(`Cannot transform elements of ${Name}.${property}`, { cause: e });
           }
         }
         return Reflect.set(instance, property, value);
@@ -161,7 +161,7 @@ export class Transformer {
 
       if (value instanceof Set) {
         if (!Array.isArray(jsonValue)) {
-          if (throwable) new TransformError(`Type of "${property}" in JSON is not "Array" as ${Name} expect`);
+          if (throwable) throw new TransformError(`Type of "${property}" in JSON is not "Array" as ${Name} expect`);
           return
         }
 
@@ -171,7 +171,7 @@ export class Transformer {
           }
         } catch (e) {
           if (throwable) {
-            new TransformError(`Cannot transform elements of ${Name}.${property}`, { cause: e });
+            throw new TransformError(`Cannot transform elements of ${Name}.${property}`, { cause: e });
           }
         }
         return Reflect.set(instance, property, value);
@@ -179,7 +179,7 @@ export class Transformer {
 
       if (value instanceof Date) {
         if (typeof jsonValue !== 'string') {
-          if (throwable) new TransformError(`Type of "${property}" in JSON is not "String" as ${Name} expect`);
+          if (throwable) throw new TransformError(`Type of "${property}" in JSON is not "String" as ${Name} expect`);
           return
         }
         return Reflect.set(instance, property, new Date(jsonValue))
@@ -209,7 +209,7 @@ export class Transformer {
       return input
     } else if (Type === Date) {
       if (typeof input === 'string') return new Date(input)
-      new TransformError(`Type of value in JSON is not "String" as ${Type?.name || ''} expect`);
+      throw new TransformError(`Type of value in JSON is not "String" as ${Type?.name || ''} expect`);
     } else {
       return this.fromJSON(input, Type, throwable)
     }
