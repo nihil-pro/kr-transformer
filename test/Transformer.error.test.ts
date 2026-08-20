@@ -42,6 +42,7 @@ describe('Exceptions', () => {
       a = null
     }
     try {
+      // @ts-ignore
       Transformer.fromJSON({ a: 2 }, Target)
     } catch (error) {
       assert.equal(error instanceof TransformError, true);
